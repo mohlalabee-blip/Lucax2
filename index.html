@@ -28,11 +28,6 @@
   --sent-msg: #005C4B;
   --received-msg: #1f2c34;
   --online: #25D366;
-  --typing: #34B7F1;
-  --status-purple: #8B5CF6;
-  --status-blue: #3B82F6;
-  --status-green: #10B981;
-  --status-orange: #F59E0B;
 }
 
 body {
@@ -55,11 +50,13 @@ body {
   display: flex;
   flex: 1;
   overflow: hidden;
+  position: relative;
 }
 
 /* Sidebar (Chats List) */
 .sidebar {
-  width: 380px;
+  width: 100%;
+  max-width: 380px;
   background: var(--bg-surface);
   border-right: 1px solid var(--border);
   display: flex;
@@ -92,17 +89,18 @@ body {
   display: block;
 }
 
-/* 3 Dots Menu Button */
+/* 3 Dots Menu Button - VISIBLE */
 .menu-btn {
   background: none;
   border: none;
   color: var(--text-primary);
-  font-size: 20px;
+  font-size: 24px;
+  font-weight: bold;
   cursor: pointer;
-  padding: 8px;
+  padding: 8px 12px;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,11 +110,11 @@ body {
   background: rgba(255,255,255,0.1);
 }
 
-/* 3 Dots Dropdown Menu */
+/* Dropdown Menu for 3 Dots */
 .dropdown-menu {
   position: absolute;
-  top: 60px;
-  right: 20px;
+  top: 70px;
+  right: 16px;
   background: var(--bg-surface);
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -167,11 +165,6 @@ body {
   gap: 12px;
   border-bottom: 1px solid var(--border);
   cursor: pointer;
-  transition: background 0.2s;
-}
-
-.user-bar:active {
-  background: rgba(255,255,255,0.05);
 }
 
 .avatar {
@@ -213,6 +206,10 @@ body {
   color: var(--text-secondary);
 }
 
+.user-status.online {
+  color: var(--online);
+}
+
 /* Search Bar */
 .search-bar {
   padding: 12px 16px;
@@ -238,6 +235,10 @@ body {
   font-size: 14px;
 }
 
+.search-container input::placeholder {
+  color: var(--text-muted);
+}
+
 /* Chat List */
 .chat-list {
   flex: 1;
@@ -250,13 +251,16 @@ body {
   gap: 14px;
   padding: 14px 16px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.2s;
   border-bottom: 1px solid var(--border);
-  position: relative;
 }
 
 .chat-item:active {
   background: rgba(255,255,255,0.05);
+}
+
+.chat-avatar {
+  position: relative;
 }
 
 .chat-avatar-img {
@@ -298,7 +302,7 @@ body {
 }
 
 .chat-preview.typing {
-  color: var(--typing);
+  color: #34B7F1;
 }
 
 .chat-meta {
@@ -486,7 +490,7 @@ body {
   justify-content: center;
 }
 
-/* Bottom Navigation Bar - WhatsApp Style */
+/* Bottom Navigation Bar - VISIBLE */
 .bottom-nav {
   background: var(--bg-surface-light);
   border-top: 1px solid var(--border);
@@ -502,12 +506,12 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 6px 12px;
+  padding: 8px 16px;
   cursor: pointer;
   border-radius: 12px;
   transition: all 0.2s;
   flex: 1;
-  max-width: 80px;
+  max-width: 100px;
 }
 
 .nav-item:active {
@@ -515,12 +519,12 @@ body {
 }
 
 .nav-icon {
-  font-size: 22px;
+  font-size: 24px;
   color: var(--text-secondary);
 }
 
 .nav-label {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-secondary);
   font-weight: 500;
 }
@@ -531,6 +535,23 @@ body {
 
 .nav-item.active .nav-label {
   color: var(--accent);
+}
+
+/* Page Content for Updates/Communities/Calls */
+.page-content {
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--text-secondary);
+  text-align: center;
+  background: var(--bg-dark);
+}
+
+.page-content.active {
+  display: flex;
 }
 
 /* Empty State */
@@ -637,6 +658,10 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
+.status-menu-item:active {
+  opacity: 0.7;
+}
+
 .status-menu-icon {
   width: 40px;
   height: 40px;
@@ -680,22 +705,6 @@ body {
 
 .panel-overlay.show {
   display: block;
-}
-
-/* Communities/Updates/Calls Pages */
-.page-content {
-  flex: 1;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  color: var(--text-secondary);
-  text-align: center;
-}
-
-.page-content.active {
-  display: flex;
 }
 
 /* Mobile */
@@ -756,17 +765,17 @@ body {
   <!-- Status Panel (Swipe Left) -->
   <div class="status-panel" id="statusPanel">
     <div class="status-header">
-      <div class="status-avatar" id="statusAvatar">JD</div>
-      <div class="status-name" id="statusName">John Doe</div>
+      <div class="status-avatar" id="statusAvatar">AJ</div>
+      <div class="status-name" id="statusName">Alex J.</div>
       <div class="status-handle">@JUSTUS</div>
     </div>
     <div class="status-stats">
       <div class="stat-item">
-        <div class="stat-number" id="chatCount">0</div>
+        <div class="stat-number" id="chatCount">4</div>
         <div class="stat-label">Chats</div>
       </div>
       <div class="stat-item">
-        <div class="stat-number" id="msgCount">0</div>
+        <div class="stat-number" id="msgCount">47</div>
         <div class="stat-label">Messages</div>
       </div>
       <div class="stat-item">
@@ -839,10 +848,10 @@ body {
       
       <div class="user-bar" id="userBar">
         <div class="avatar online" id="userAvatar">
-          <span id="userInitial">U</span>
+          <span id="userInitial">AJ</span>
         </div>
         <div class="user-info">
-          <div class="user-name" id="userName">Your Name</div>
+          <div class="user-name" id="userName">Alex J.</div>
           <div class="user-status online" id="userStatus">Online</div>
         </div>
       </div>
@@ -854,15 +863,10 @@ body {
         </div>
       </div>
       
-      <div class="chat-list" id="chatList">
-        <div style="padding: 40px; text-align: center; color: var(--text-muted);">
-          ✨ No conversations yet<br>
-          <span style="font-size: 12px;">Share invite code: JUSTUS</span>
-        </div>
-      </div>
+      <div class="chat-list" id="chatList"></div>
     </div>
     
-    <!-- Chat Area -->
+    <!-- Chat Area (only visible on Chats tab) -->
     <div class="main-chat" id="mainChat">
       <div class="empty-state" id="emptyState">
         <div class="empty-icon">💬</div>
@@ -917,7 +921,7 @@ body {
     </div>
   </div>
 
-  <!-- Bottom Navigation Bar -->
+  <!-- Bottom Navigation Bar - VISIBLE AT BOTTOM -->
   <div class="bottom-nav">
     <div class="nav-item active" data-page="chats">
       <div class="nav-icon">💬</div>
@@ -940,38 +944,36 @@ body {
 
 <script>
 // Demo data
-let currentUser = {
-  name: "Alex J.",
-  initial: "A",
-  handle: "@JUSTUS"
-};
-
 let demoChats = [
-  { id: 1, name: "Sarah Chen", lastMessage: "Hey! How are you?", time: "10:42 AM", unread: 2, online: true, avatar: "S" },
-  { id: 2, name: "Mike Johnson", lastMessage: "Thanks for the update", time: "9:15 AM", unread: 0, online: false, avatar: "M" },
-  { id: 3, name: "Emily Davis", lastMessage: "Love the app! 🔥", time: "Yesterday", unread: 0, online: true, avatar: "E" },
-  { id: 4, name: "David Kim", lastMessage: "See you tomorrow", time: "Yesterday", unread: 1, online: true, avatar: "D" }
+  { id: 1, name: "Sarah Chen", lastMessage: "Hey! How are you?", time: "10:42 AM", unread: 2, online: true, avatar: "S", typing: false },
+  { id: 2, name: "Mike Johnson", lastMessage: "Thanks for the update", time: "9:15 AM", unread: 0, online: false, avatar: "M", typing: false },
+  { id: 3, name: "Emily Davis", lastMessage: "Love the app! 🔥", time: "Yesterday", unread: 0, online: true, avatar: "E", typing: false },
+  { id: 4, name: "David Kim", lastMessage: "typing...", time: "Yesterday", unread: 1, online: true, avatar: "D", typing: true }
 ];
 
 let messagesData = {
-  1: [{ text: "Hey! How are you?", sent: false, time: "10:41 AM", read: true }],
-  2: [{ text: "Thanks for the update", sent: false, time: "9:10 AM", read: true }],
-  3: [{ text: "Love the app! 🔥", sent: false, time: "Yesterday", read: true }],
-  4: [{ text: "See you tomorrow", sent: false, time: "Yesterday", read: true }]
+  1: [
+    { text: "Hey! How are you?", sent: false, time: "10:41 AM", read: true },
+    { text: "I'm good! Working on JUSTUS app", sent: true, time: "10:42 AM", read: true }
+  ],
+  2: [
+    { text: "Thanks for the update", sent: false, time: "9:10 AM", read: true }
+  ],
+  3: [
+    { text: "Love the app! 🔥", sent: false, time: "Yesterday", read: true }
+  ],
+  4: [
+    { text: "See you tomorrow", sent: false, time: "Yesterday", read: false }
+  ]
 };
 
-let totalMessages = 47;
 let currentChatId = null;
+let currentPage = "chats";
 
 // Page navigation
-const pages = {
-  chats: { sidebar: true, chat: true, updates: false, communities: false, calls: false },
-  updates: { sidebar: false, chat: false, updates: true, communities: false, calls: false },
-  communities: { sidebar: false, chat: false, updates: false, communities: true, calls: false },
-  calls: { sidebar: false, chat: false, updates: false, communities: false, calls: true }
-};
-
 function switchPage(page) {
+  currentPage = page;
+  
   // Update active state on nav items
   document.querySelectorAll('.nav-item').forEach(item => {
     item.classList.remove('active');
@@ -980,47 +982,147 @@ function switchPage(page) {
     }
   });
   
-  // Show/hide content
+  // Get all page elements
   const sidebar = document.getElementById('sidebar');
   const mainChat = document.getElementById('mainChat');
   const updatesPage = document.getElementById('updatesPage');
   const communitiesPage = document.getElementById('communitiesPage');
   const callsPage = document.getElementById('callsPage');
-  const emptyState = document.getElementById('emptyState');
-  const activeChat = document.getElementById('activeChat');
   
+  // Hide all pages first
+  sidebar.style.display = 'none';
+  mainChat.style.display = 'none';
+  updatesPage.style.display = 'none';
+  communitiesPage.style.display = 'none';
+  callsPage.style.display = 'none';
+  
+  // Show selected page
   if (page === 'chats') {
     sidebar.style.display = 'flex';
     mainChat.style.display = 'flex';
-    updatesPage.style.display = 'none';
-    communitiesPage.style.display = 'none';
-    callsPage.style.display = 'none';
-    if (!currentChatId) {
-      emptyState.style.display = 'flex';
-      activeChat.style.display = 'none';
+    // Restore chat if one was open
+    if (currentChatId) {
+      document.getElementById('emptyState').style.display = 'none';
+      document.getElementById('activeChat').style.display = 'flex';
+    } else {
+      document.getElementById('emptyState').style.display = 'flex';
+      document.getElementById('activeChat').style.display = 'none';
     }
   } else if (page === 'updates') {
-    sidebar.style.display = 'none';
-    mainChat.style.display = 'none';
     updatesPage.style.display = 'flex';
-    communitiesPage.style.display = 'none';
-    callsPage.style.display = 'none';
   } else if (page === 'communities') {
-    sidebar.style.display = 'none';
-    mainChat.style.display = 'none';
-    updatesPage.style.display = 'none';
     communitiesPage.style.display = 'flex';
-    callsPage.style.display = 'none';
   } else if (page === 'calls') {
-    sidebar.style.display = 'none';
-    mainChat.style.display = 'none';
-    updatesPage.style.display = 'none';
-    communitiesPage.style.display = 'none';
     callsPage.style.display = 'flex';
   }
 }
 
-// Add click handlers to nav items
+// Render chat list
+function renderChatList() {
+  const container = document.getElementById('chatList');
+  container.innerHTML = demoChats.map(chat => `
+    <div class="chat-item" data-chat-id="${chat.id}">
+      <div class="chat-avatar">
+        <div class="chat-avatar-img">${chat.avatar}</div>
+        ${chat.online ? '<div class="online-dot"></div>' : ''}
+      </div>
+      <div class="chat-info">
+        <div class="chat-name">${chat.name}</div>
+        <div class="chat-preview ${chat.typing ? 'typing' : ''}">${chat.lastMessage}</div>
+      </div>
+      <div class="chat-meta">
+        <div class="chat-time">${chat.time}</div>
+        ${chat.unread > 0 ? `<div class="unread-badge">${chat.unread}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+  
+  document.querySelectorAll('.chat-item').forEach(item => {
+    item.addEventListener('click', () => {
+      openChat(parseInt(item.dataset.chatId));
+    });
+  });
+}
+
+function openChat(chatId) {
+  currentChatId = chatId;
+  const chat = demoChats.find(c => c.id === chatId);
+  if (!chat) return;
+  
+  // Ensure we're on chats page
+  if (currentPage !== 'chats') {
+    switchPage('chats');
+  }
+  
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('activeChat').style.display = 'flex';
+  
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.add('hide');
+    document.getElementById('mainChat').classList.add('show');
+  }
+  
+  document.getElementById('chatName').textContent = chat.name;
+  document.getElementById('chatAvatar').textContent = chat.avatar;
+  document.getElementById('chatOnlineDot').style.display = chat.online ? 'block' : 'none';
+  document.getElementById('chatStatus').textContent = chat.online ? 'Online' : 'Offline';
+  
+  const messages = messagesData[chatId] || [];
+  const container = document.getElementById('messagesArea');
+  container.innerHTML = messages.map(msg => `
+    <div class="message ${msg.sent ? 'sent' : 'received'}">
+      <div class="message-bubble">
+        ${msg.text}
+        <div class="message-meta">
+          <span>${msg.time}</span>
+          ${msg.sent ? `<span class="message-status">${msg.read ? '✓✓' : '✓'}</span>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+  container.scrollTop = container.scrollHeight;
+  
+  chat.unread = 0;
+  renderChatList();
+}
+
+// Send message
+document.getElementById('sendBtn').addEventListener('click', () => {
+  const input = document.getElementById('messageInput');
+  const text = input.value.trim();
+  if (!text || !currentChatId) return;
+  
+  const container = document.getElementById('messagesArea');
+  const newMsg = document.createElement('div');
+  newMsg.className = 'message sent';
+  newMsg.innerHTML = `<div class="message-bubble">${text}<div class="message-meta"><span>Now</span><span class="message-status">✓</span></div></div>`;
+  container.appendChild(newMsg);
+  container.scrollTop = container.scrollHeight;
+  input.value = '';
+  
+  setTimeout(() => {
+    const reply = document.createElement('div');
+    reply.className = 'message received';
+    reply.innerHTML = `<div class="message-bubble">🔒 Received securely on JUSTUS<div class="message-meta"><span>Now</span></div></div>`;
+    container.appendChild(reply);
+    container.scrollTop = container.scrollHeight;
+  }, 1000);
+});
+
+document.getElementById('messageInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    document.getElementById('sendBtn').click();
+  }
+});
+
+// Back button
+document.getElementById('backBtn').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.remove('hide');
+  document.getElementById('mainChat').classList.remove('show');
+});
+
+// Nav item click handlers
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', () => {
     switchPage(item.dataset.page);
@@ -1036,7 +1138,6 @@ menuBtn.addEventListener('click', (e) => {
   dropdownMenu.classList.toggle('show');
 });
 
-// Close dropdown when clicking outside
 document.addEventListener('click', () => {
   dropdownMenu.classList.remove('show');
 });
@@ -1045,27 +1146,23 @@ dropdownMenu.addEventListener('click', (e) => {
   e.stopPropagation();
 });
 
-// Dropdown menu actions
+// Dropdown actions
 document.getElementById('dropdownSettings').addEventListener('click', () => {
   dropdownMenu.classList.remove('show');
-  alert('⚙️ Settings page coming soon!');
+  alert('⚙️ Settings - Coming Soon!\n\n• Notification Settings\n• Privacy Controls\n• Chat Backup');
 });
-
 document.getElementById('dropdownProfile').addEventListener('click', () => {
   dropdownMenu.classList.remove('show');
   document.getElementById('userBar').click();
 });
-
 document.getElementById('dropdownInvite').addEventListener('click', () => {
   dropdownMenu.classList.remove('show');
-  alert('🔗 Invite Code: JUSTUS\n\nShare this code with friends!');
+  alert('🔐 Invite Code: JUSTUS\n\nShare this code with friends to join your private room!');
 });
-
 document.getElementById('dropdownTheme').addEventListener('click', () => {
   dropdownMenu.classList.remove('show');
-  alert('🌙 Theme customization coming soon!');
+  alert('🌙 Dark Mode is currently active!\n\nLight mode coming soon.');
 });
-
 document.getElementById('dropdownLogout').addEventListener('click', () => {
   dropdownMenu.classList.remove('show');
   if (confirm('Are you sure you want to logout?')) {
@@ -1073,17 +1170,7 @@ document.getElementById('dropdownLogout').addEventListener('click', () => {
   }
 });
 
-// Update status panel stats
-function updateStatusStats() {
-  document.getElementById('chatCount').textContent = demoChats.length;
-  document.getElementById('msgCount').textContent = totalMessages;
-  document.getElementById('statusName').textContent = currentUser.name;
-  document.getElementById('statusAvatar').textContent = currentUser.initial;
-  document.getElementById('userName').textContent = currentUser.name;
-  document.getElementById('userInitial').textContent = currentUser.initial;
-}
-
-// Swipe left for status panel
+// Status panel
 let touchStartX = 0;
 let isPanelOpen = false;
 const statusPanel = document.getElementById('statusPanel');
@@ -1116,126 +1203,30 @@ document.querySelector('.main-content').addEventListener('touchend', (e) => {
 panelOverlay.addEventListener('click', closeStatusPanel);
 document.getElementById('userBar').addEventListener('click', openStatusPanel);
 
-// Status panel buttons
 document.getElementById('statusProfileBtn').addEventListener('click', () => {
   closeStatusPanel();
-  alert('👤 Profile: ' + currentUser.name + '\nHandle: JUSTUS');
+  alert('👤 Profile: Alex J.\n📧 alex@justus.com\n🔒 End-to-end encrypted');
 });
 document.getElementById('statusInviteBtn').addEventListener('click', () => {
   closeStatusPanel();
-  alert('🔗 Invite Code: JUSTUS');
+  alert('🔗 Invite Code: JUSTUS\n\nShare this code with friends!');
 });
 document.getElementById('statusLogoutBtn').addEventListener('click', () => {
   closeStatusPanel();
-  if (confirm('Logout?')) alert('Logged out');
+  if (confirm('Logout from JUSTUS?')) alert('Logged out');
 });
 
-// Render chat list
-function renderChatList() {
-  const container = document.getElementById('chatList');
-  container.innerHTML = demoChats.map(chat => `
-    <div class="chat-item" data-chat-id="${chat.id}">
-      <div class="chat-avatar-img">${chat.avatar}</div>
-      <div class="chat-info">
-        <div class="chat-name">${chat.name}</div>
-        <div class="chat-preview">${chat.lastMessage}</div>
-      </div>
-      <div class="chat-meta">
-        <div class="chat-time">${chat.time}</div>
-        ${chat.unread > 0 ? `<div class="unread-badge">${chat.unread}</div>` : ''}
-      </div>
-    </div>
-  `).join('');
-  
-  document.querySelectorAll('.chat-item').forEach(item => {
-    item.addEventListener('click', () => openChat(parseInt(item.dataset.chatId)));
-  });
-}
+// Initialize
+renderChatList();
+switchPage('chats');
 
-function openChat(chatId) {
-  currentChatId = chatId;
-  const chat = demoChats.find(c => c.id === chatId);
-  if (!chat) return;
-  
-  switchPage('chats');
-  document.getElementById('emptyState').style.display = 'none';
-  document.getElementById('activeChat').style.display = 'flex';
-  
-  if (window.innerWidth <= 768) {
-    document.getElementById('sidebar').classList.add('hide');
-    document.getElementById('mainChat').classList.add('show');
-  }
-  
-  document.getElementById('chatName').textContent = chat.name;
-  document.getElementById('chatAvatar').textContent = chat.avatar;
-  document.getElementById('chatOnlineDot').style.display = chat.online ? 'block' : 'none';
-  document.getElementById('chatStatus').textContent = chat.online ? 'Online' : 'Offline';
-  
-  const messages = messagesData[chatId] || [];
-  const container = document.getElementById('messagesArea');
-  container.innerHTML = messages.map(msg => `
-    <div class="message ${msg.sent ? 'sent' : 'received'}">
-      <div class="message-bubble">
-        ${msg.text}
-        <div class="message-meta"><span>${msg.time}</span></div>
-      </div>
-    </div>
-  `).join('');
-  container.scrollTop = container.scrollHeight;
-  
-  chat.unread = 0;
-  renderChatList();
-}
-
-// Send message
-document.getElementById('sendBtn').addEventListener('click', () => {
-  const input = document.getElementById('messageInput');
-  const text = input.value.trim();
-  if (!text || !currentChatId) return;
-  
-  const container = document.getElementById('messagesArea');
-  const newMsg = document.createElement('div');
-  newMsg.className = 'message sent';
-  newMsg.innerHTML = `<div class="message-bubble">${text}<div class="message-meta"><span>Now</span></div></div>`;
-  container.appendChild(newMsg);
-  container.scrollTop = container.scrollHeight;
-  input.value = '';
-  totalMessages++;
-  updateStatusStats();
-  
-  setTimeout(() => {
-    const reply = document.createElement('div');
-    reply.className = 'message received';
-    reply.innerHTML = `<div class="message-bubble">🔒 Received on JUSTUS<div class="message-meta"><span>Now</span></div></div>`;
-    container.appendChild(reply);
-    container.scrollTop = container.scrollHeight;
-  }, 1000);
-});
-
-document.getElementById('messageInput').addEventListener('keypress', (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    document.getElementById('sendBtn').click();
-  }
-});
-
-document.getElementById('backBtn').addEventListener('click', () => {
-  document.getElementById('sidebar').classList.remove('hide');
-  document.getElementById('mainChat').classList.remove('show');
-  currentChatId = null;
-  document.getElementById('emptyState').style.display = 'flex';
-  document.getElementById('activeChat').style.display = 'none';
-});
-
+// Handle resize
 window.addEventListener('resize', () => {
   if (window.innerWidth > 768) {
     document.getElementById('sidebar').classList.remove('hide');
     document.getElementById('mainChat').classList.remove('show');
   }
 });
-
-updateStatusStats();
-renderChatList();
 </script>
 </body>
 </html>
