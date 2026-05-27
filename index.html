@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Private Room • Advanced Chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>JUSTUS • Private Chat</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#25D366">
 <style>
 * {
   margin: 0;
@@ -27,6 +29,10 @@
   --received-msg: #1f2c34;
   --online: #25D366;
   --typing: #34B7F1;
+  --status-purple: #8B5CF6;
+  --status-blue: #3B82F6;
+  --status-green: #10B981;
+  --status-orange: #F59E0B;
 }
 
 body {
@@ -37,14 +43,13 @@ body {
   overflow: hidden;
 }
 
-/* App Container */
 .app-container {
   display: flex;
   height: 100vh;
   background: var(--bg-dark);
 }
 
-/* Sidebar (Chats List) */
+/* Sidebar */
 .sidebar {
   width: 380px;
   background: var(--bg-surface);
@@ -52,60 +57,33 @@ body {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  transition: transform 0.3s ease;
 }
 
-/* Header */
 .sidebar-header {
-  padding: 16px 20px;
+  padding: 20px 20px 12px;
   background: var(--bg-surface-light);
   border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .logo h1 {
-  font-size: 20px;
-  font-weight: 600;
-  background: linear-gradient(135deg, #25D366, #128C7E);
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #25D366, #128C7E, #8B5CF6);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  letter-spacing: -0.5px;
 }
 
 .logo span {
-  font-size: 12px;
-  color: var(--text-secondary);
+  font-size: 11px;
+  color: var(--text-muted);
   display: block;
+  margin-top: 4px;
 }
 
-.header-actions {
-  display: flex;
-  gap: 16px;
-}
-
-.icon-btn {
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 20px;
-  cursor: pointer;
-  padding: 6px;
-  transition: all 0.2s;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-align-items: center;
-  justify-content: center;
-}
-
-.icon-btn:hover {
-  background: rgba(255,255,255,0.1);
-  color: var(--accent);
-}
-
-/* User Profile Bar */
+/* User Bar */
 .user-bar {
   padding: 12px 20px;
   background: var(--bg-surface-light);
@@ -113,20 +91,25 @@ align-items: center;
   align-items: center;
   gap: 12px;
   border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.user-bar:active {
+  background: rgba(255,255,255,0.05);
 }
 
 .avatar {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: linear-gradient(135deg, #25D366, #128C7E);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   position: relative;
-  cursor: pointer;
 }
 
 .avatar.online::after {
@@ -134,8 +117,8 @@ align-items: center;
   position: absolute;
   bottom: 2px;
   right: 2px;
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   background: var(--online);
   border-radius: 50%;
   border: 2px solid var(--bg-surface-light);
@@ -146,8 +129,8 @@ align-items: center;
 }
 
 .user-name {
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 17px;
 }
 
 .user-status {
@@ -155,25 +138,20 @@ align-items: center;
   color: var(--text-secondary);
 }
 
-.status-typing {
-  color: var(--typing);
-}
-
-.user-actions {
-  display: flex;
-  gap: 8px;
+.user-status.online {
+  color: var(--online);
 }
 
 /* Search Bar */
 .search-bar {
-  padding: 10px 16px;
+  padding: 12px 16px;
   background: var(--bg-surface);
 }
 
 .search-container {
   background: var(--bg-dark);
   border-radius: 30px;
-  padding: 8px 16px;
+  padding: 10px 16px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -203,19 +181,15 @@ align-items: center;
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 12px 16px;
+  padding: 14px 16px;
   cursor: pointer;
   transition: all 0.2s;
   border-bottom: 1px solid var(--border);
   position: relative;
 }
 
-.chat-item:hover {
+.chat-item:active {
   background: rgba(255,255,255,0.05);
-}
-
-.chat-item.active {
-  background: rgba(37, 211, 102, 0.1);
 }
 
 .chat-avatar {
@@ -251,7 +225,7 @@ align-items: center;
 
 .chat-name {
   font-weight: 600;
-  font-size: 15px;
+  font-size: 16px;
   margin-bottom: 4px;
 }
 
@@ -261,10 +235,6 @@ align-items: center;
   display: flex;
   gap: 6px;
   align-items: center;
-}
-
-.chat-preview i {
-  font-style: normal;
 }
 
 .chat-preview.typing {
@@ -295,11 +265,6 @@ align-items: center;
   padding: 0 6px;
 }
 
-.pinned-badge {
-  color: var(--accent);
-  font-size: 12px;
-}
-
 /* Main Chat Area */
 .main-chat {
   flex: 1;
@@ -323,8 +288,17 @@ align-items: center;
   background: none;
   border: none;
   color: var(--text-primary);
-  font-size: 24px;
+  font-size: 28px;
   cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-btn:active {
+  background: rgba(255,255,255,0.1);
 }
 
 .chat-header-avatar {
@@ -358,11 +332,6 @@ align-items: center;
   color: var(--typing);
 }
 
-.chat-header-actions {
-  display: flex;
-  gap: 12px;
-}
-
 /* Messages Area */
 .messages-area {
   flex: 1;
@@ -371,8 +340,6 @@ align-items: center;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background-image: radial-gradient(var(--border) 1px, transparent 1px);
-  background-size: 40px 40px;
 }
 
 .message {
@@ -425,53 +392,8 @@ align-items: center;
   opacity: 0.7;
 }
 
-.message-time {
-  font-size: 10px;
-}
-
-.message-status {
-  font-size: 12px;
-}
-
-.status-read {
+.message-status.read {
   color: #34B7F1;
-}
-
-.message-image {
-  max-width: 250px;
-  max-height: 200px;
-  border-radius: 12px;
-  margin-bottom: 6px;
-  cursor: pointer;
-}
-
-/* Typing Bubble */
-.typing-bubble {
-  display: none;
-  align-self: flex-start;
-  background: var(--received-msg);
-  padding: 12px 16px;
-  border-radius: 18px;
-  border-bottom-left-radius: 4px;
-  gap: 4px;
-  margin-bottom: 8px;
-}
-
-.typing-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--text-secondary);
-  border-radius: 50%;
-  display: inline-block;
-  animation: typing 1.4s infinite;
-}
-
-.typing-dot:nth-child(2) { animation-delay: 0.2s; }
-.typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes typing {
-  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-  30% { transform: translateY(-6px); opacity: 1; }
 }
 
 /* Input Area */
@@ -482,30 +404,6 @@ align-items: center;
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.input-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.input-action-btn {
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 22px;
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.input-action-btn:hover {
-  background: rgba(255,255,255,0.1);
 }
 
 .message-input {
@@ -530,8 +428,8 @@ align-items: center;
   background: var(--accent);
   border: none;
   color: white;
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   cursor: pointer;
   font-size: 18px;
@@ -541,9 +439,223 @@ align-items: center;
   transition: all 0.2s;
 }
 
-.send-btn:hover {
-  transform: scale(1.05);
-  background: #128C7E;
+.send-btn:active {
+  transform: scale(0.95);
+}
+
+/* Status Panel - Shows on Swipe Left */
+.status-panel {
+  position: fixed;
+  left: -280px;
+  top: 0;
+  bottom: 0;
+  width: 280px;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  z-index: 100;
+  transition: left 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.status-panel.open {
+  left: 0;
+}
+
+.status-header {
+  padding: 60px 20px 30px;
+  background: linear-gradient(135deg, #1a1a2e, #0a0a0a);
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.status-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #25D366, #8B5CF6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: bold;
+  margin: 0 auto 16px;
+}
+
+.status-name {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.status-handle {
+  font-size: 14px;
+  color: var(--accent);
+  margin-top: 4px;
+  font-family: monospace;
+  letter-spacing: 1px;
+}
+
+.status-stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.status-menu {
+  padding: 20px;
+}
+
+.status-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: opacity 0.2s;
+}
+
+.status-menu-item:active {
+  opacity: 0.7;
+}
+
+.status-menu-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(37, 211, 102, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.status-menu-text {
+  flex: 1;
+}
+
+.status-menu-title {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.status-menu-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.status-menu-item.danger .status-menu-icon {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.status-menu-item.danger .status-menu-title {
+  color: #EF4444;
+}
+
+/* Overlay */
+.panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+  display: none;
+}
+
+.panel-overlay.show {
+  display: block;
+}
+
+/* Settings Modal */
+.settings-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-modal.show {
+  display: flex;
+}
+
+.settings-box {
+  background: var(--bg-surface);
+  border-radius: 28px;
+  width: 90%;
+  max-width: 340px;
+  overflow: hidden;
+}
+
+.settings-header {
+  padding: 20px;
+  background: var(--bg-surface-light);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings-header h3 {
+  font-size: 18px;
+}
+
+.settings-close {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.settings-list {
+  padding: 8px 0;
+}
+
+.settings-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-item:active {
+  background: rgba(255,255,255,0.05);
+}
+
+.settings-icon {
+  font-size: 22px;
+  width: 40px;
+}
+
+.settings-item.danger .settings-icon {
+  color: #EF4444;
+}
+
+.settings-item.danger span:not(.settings-icon) {
+  color: #EF4444;
 }
 
 /* Empty State */
@@ -564,11 +676,7 @@ align-items: center;
   opacity: 0.5;
 }
 
-.empty-text {
-  font-size: 16px;
-}
-
-/* Mobile Responsive */
+/* Mobile */
 @media (max-width: 768px) {
   .sidebar {
     position: absolute;
@@ -577,7 +685,6 @@ align-items: center;
     bottom: 0;
     width: 100%;
     z-index: 10;
-    transition: transform 0.3s;
   }
   
   .sidebar.hide {
@@ -605,11 +712,15 @@ align-items: center;
   .message {
     max-width: 85%;
   }
+  
+  .status-panel {
+    width: 260px;
+  }
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -618,27 +729,82 @@ align-items: center;
 
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  border-radius: 4px;
 }
 </style>
 </head>
 <body>
+
 <div class="app-container">
+  <!-- Status Panel (Swipe Left to Open) -->
+  <div class="status-panel" id="statusPanel">
+    <div class="status-header">
+      <div class="status-avatar" id="statusAvatar">JD</div>
+      <div class="status-name" id="statusName">John Doe</div>
+      <div class="status-handle">@JUSTUS</div>
+    </div>
+    <div class="status-stats">
+      <div class="stat-item">
+        <div class="stat-number" id="chatCount">0</div>
+        <div class="stat-label">Chats</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" id="msgCount">0</div>
+        <div class="stat-label">Messages</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">🔒</div>
+        <div class="stat-label">Private</div>
+      </div>
+    </div>
+    <div class="status-menu">
+      <div class="status-menu-item" id="statusProfileBtn">
+        <div class="status-menu-icon">👤</div>
+        <div class="status-menu-text">
+          <div class="status-menu-title">My Profile</div>
+          <div class="status-menu-desc">View and edit your info</div>
+        </div>
+      </div>
+      <div class="status-menu-item" id="statusSettingsBtn">
+        <div class="status-menu-icon">⚙️</div>
+        <div class="status-menu-text">
+          <div class="status-menu-title">Settings</div>
+          <div class="status-menu-desc">Privacy, notifications, and more</div>
+        </div>
+      </div>
+      <div class="status-menu-item" id="statusInviteBtn">
+        <div class="status-menu-icon">🔗</div>
+        <div class="status-menu-text">
+          <div class="status-menu-title">Invite Friends</div>
+          <div class="status-menu-desc">Share JUSTUS invite code</div>
+        </div>
+      </div>
+      <div class="status-menu-item" id="statusThemeBtn">
+        <div class="status-menu-icon">🌙</div>
+        <div class="status-menu-text">
+          <div class="status-menu-title">Dark Mode</div>
+          <div class="status-menu-desc">Toggle theme</div>
+        </div>
+      </div>
+      <div class="status-menu-item danger" id="statusLogoutBtn">
+        <div class="status-menu-icon">🚪</div>
+        <div class="status-menu-text">
+          <div class="status-menu-title">Logout</div>
+          <div class="status-menu-desc">Sign out of JUSTUS</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-overlay" id="panelOverlay"></div>
+
   <!-- Sidebar / Chats List -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="logo">
-        <h1>Private Room</h1>
-        <span>🔒 Invite-only</span>
+        <h1>JUSTUS</h1>
+        <span>🔒 Private & Secure</span>
       </div>
-      <div class="header-actions">
-        <button class="icon-btn" id="settingsBtn">⚙️</button>
-        <button class="icon-btn" id="newChatBtn">✏️</button>
-      </div>
+      <button class="icon-btn" id="settingsBtn" style="background:none; border:none; font-size:24px; cursor:pointer;">⚙️</button>
     </div>
     
     <div class="user-bar" id="userBar">
@@ -647,11 +813,7 @@ align-items: center;
       </div>
       <div class="user-info">
         <div class="user-name" id="userName">Your Name</div>
-        <div class="user-status" id="userStatus">Online</div>
-      </div>
-      <div class="user-actions">
-        <button class="icon-btn" id="statusBtn">💬</button>
-        <button class="icon-btn" id="logoutBtn">🚪</button>
+        <div class="user-status online" id="userStatus">Online</div>
       </div>
     </div>
     
@@ -663,10 +825,9 @@ align-items: center;
     </div>
     
     <div class="chat-list" id="chatList">
-      <!-- Chat items will be dynamically added here -->
       <div style="padding: 40px; text-align: center; color: var(--text-muted);">
         ✨ No conversations yet<br>
-        <span style="font-size: 12px;">Share your invite code to connect</span>
+        <span style="font-size: 12px;">Share your invite code: JUSTUS</span>
       </div>
     </div>
   </div>
@@ -674,9 +835,9 @@ align-items: center;
   <!-- Main Chat Area -->
   <div class="main-chat" id="mainChat">
     <div class="empty-state" id="emptyState">
-      <div class="empty-icon">🔒</div>
+      <div class="empty-icon">💬</div>
       <div class="empty-text">Select a chat to start messaging</div>
-      <div style="font-size: 12px;">Your messages are private & encrypted</div>
+      <div style="font-size: 12px; margin-top: 8px;">Powered by JUSTUS 🔒</div>
     </div>
     
     <div id="activeChat" style="display: none; flex: 1; flex-direction: column; overflow: hidden;">
@@ -690,28 +851,13 @@ align-items: center;
           <div class="chat-header-name" id="chatName">Contact Name</div>
           <div class="chat-header-status" id="chatStatus">Online</div>
         </div>
-        <div class="chat-header-actions">
-          <button class="icon-btn" id="callBtn">📞</button>
-          <button class="icon-btn" id="videoBtn">📹</button>
-          <button class="icon-btn" id="menuBtn">⋮</button>
-        </div>
       </div>
       
       <div class="messages-area" id="messagesArea">
-        <!-- Messages will appear here -->
-      </div>
-      
-      <div class="typing-bubble" id="typingBubble">
-        <span class="typing-dot"></span>
-        <span class="typing-dot"></span>
-        <span class="typing-dot"></span>
+        <!-- Messages appear here -->
       </div>
       
       <div class="input-area">
-        <div class="input-actions">
-          <button class="input-action-btn" id="attachBtn">📎</button>
-          <button class="input-action-btn" id="emojiBtn">😊</button>
-        </div>
         <textarea class="message-input" id="messageInput" rows="1" placeholder="Type a message..."></textarea>
         <button class="send-btn" id="sendBtn">➤</button>
       </div>
@@ -719,36 +865,111 @@ align-items: center;
   </div>
 </div>
 
+<!-- Settings Modal -->
+<div class="settings-modal" id="settingsModal">
+  <div class="settings-box">
+    <div class="settings-header">
+      <h3>⚙️ Settings</h3>
+      <button class="settings-close" id="closeSettingsBtn">✕</button>
+    </div>
+    <div class="settings-list">
+      <div class="settings-item" id="modalEditName">
+        <div class="settings-icon">✏️</div>
+        <span>Edit Display Name</span>
+      </div>
+      <div class="settings-item" id="modalInviteCode">
+        <div class="settings-icon">🔐</div>
+        <span>View Invite Code</span>
+      </div>
+      <div class="settings-item" id="modalClearChats">
+        <div class="settings-icon">🗑️</div>
+        <span>Clear All Chats</span>
+      </div>
+      <div class="settings-item danger" id="modalLogout">
+        <div class="settings-icon">🚪</div>
+        <span>Logout</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-// Sample data for demo - replace with your Firebase integration
-const demoChats = [
-  { id: 1, name: "Alex Morgan", lastMessage: "Hey! How are you?", time: "10:42 AM", unread: 2, online: true, typing: false, avatar: "A" },
-  { id: 2, name: "Sarah Chen", lastMessage: "See you tomorrow 👋", time: "9:15 AM", unread: 0, online: false, typing: false, avatar: "S" },
-  { id: 3, name: "Mike Johnson", lastMessage: "Thanks for the update", time: "Yesterday", unread: 0, online: true, typing: false, avatar: "M" },
-  { id: 4, name: "Emily Davis", lastMessage: "Love the new design! 🔥", time: "Yesterday", unread: 3, online: true, typing: true, avatar: "E" }
+// Demo data
+let currentUser = {
+  name: "Alex J.",
+  initial: "A",
+  handle: "@JUSTUS"
+};
+
+let demoChats = [
+  { id: 1, name: "Sarah Chen", lastMessage: "Hey! How are you?", time: "10:42 AM", unread: 2, online: true, typing: false, avatar: "S" },
+  { id: 2, name: "Mike Johnson", lastMessage: "Thanks for the update", time: "9:15 AM", unread: 0, online: false, typing: false, avatar: "M" },
+  { id: 3, name: "Emily Davis", lastMessage: "Love the app! 🔥", time: "Yesterday", unread: 0, online: true, typing: false, avatar: "E" },
+  { id: 4, name: "David Kim", lastMessage: "See you tomorrow", time: "Yesterday", unread: 1, online: true, typing: true, avatar: "D" }
 ];
 
-const demoMessages = {
-  1: [
-    { text: "Hey! How are you?", sent: false, time: "10:41 AM", read: true },
-    { text: "I'm good, thanks! Working on the new project.", sent: true, time: "10:42 AM", read: true },
-    { text: "That sounds exciting! Need any help?", sent: false, time: "10:43 AM", read: true },
-    { text: "Actually yes! Can you review this design?", sent: true, time: "10:44 AM", read: false }
-  ],
-  2: [
-    { text: "Don't forget about the meeting at 3pm", sent: false, time: "9:10 AM", read: true },
-    { text: "Got it, I'll be there!", sent: true, time: "9:15 AM", read: true }
-  ],
-  3: [
-    { text: "Thanks for the update", sent: false, time: "Yesterday", read: true },
-    { text: "No problem! Let me know if you need anything else", sent: true, time: "Yesterday", read: true }
-  ],
-  4: [
-    { text: "Check out this new design!", sent: false, time: "Yesterday", read: true },
-    { text: "Wow that looks amazing! 🔥", sent: true, time: "Yesterday", read: true },
-    { text: "Love the new design! 🔥", sent: false, time: "Yesterday", read: false }
-  ]
-};
+let totalMessages = 47;
+
+// Update status panel stats
+function updateStatusStats() {
+  document.getElementById('chatCount').textContent = demoChats.length;
+  document.getElementById('msgCount').textContent = totalMessages;
+  document.getElementById('statusName').textContent = currentUser.name;
+  document.getElementById('statusAvatar').textContent = currentUser.initial;
+  document.getElementById('userName').textContent = currentUser.name;
+  document.getElementById('userInitial').textContent = currentUser.initial;
+}
+
+// Swipe left detection for status panel
+let touchStartX = 0;
+let touchEndX = 0;
+let isPanelOpen = false;
+
+const sidebar = document.getElementById('sidebar');
+const statusPanel = document.getElementById('statusPanel');
+const panelOverlay = document.getElementById('panelOverlay');
+
+function openStatusPanel() {
+  statusPanel.classList.add('open');
+  panelOverlay.classList.add('show');
+  isPanelOpen = true;
+}
+
+function closeStatusPanel() {
+  statusPanel.classList.remove('open');
+  panelOverlay.classList.remove('show');
+  isPanelOpen = false;
+}
+
+// Detect swipe left on sidebar
+sidebar.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+});
+
+sidebar.addEventListener('touchend', (e) => {
+  touchEndX = e.changedTouches[0].clientX;
+  const swipeDistance = touchStartX - touchEndX;
+  // Swipe left > 50px opens status panel
+  if (swipeDistance > 50 && !isPanelOpen && touchStartX < 100) {
+    openStatusPanel();
+  }
+});
+
+// Also detect swipe on the whole app container for edge
+document.querySelector('.app-container').addEventListener('touchstart', (e) => {
+  if (e.touches[0].clientX < 50) {
+    touchStartX = e.touches[0].clientX;
+  }
+});
+
+document.querySelector('.app-container').addEventListener('touchend', (e) => {
+  if (touchStartX && e.changedTouches[0].clientX < touchStartX - 50 && !isPanelOpen) {
+    openStatusPanel();
+  }
+});
+
+// Close panel when tapping overlay
+panelOverlay.addEventListener('click', closeStatusPanel);
 
 // Render chat list
 function renderChatList() {
@@ -772,7 +993,6 @@ function renderChatList() {
     </div>
   `).join('');
   
-  // Add click handlers
   document.querySelectorAll('.chat-item').forEach(item => {
     item.addEventListener('click', () => {
       const chatId = parseInt(item.dataset.chatId);
@@ -781,8 +1001,29 @@ function renderChatList() {
   });
 }
 
-// Open chat
+let currentChatId = null;
+let messagesData = {
+  1: [
+    { text: "Hey! How are you?", sent: false, time: "10:41 AM", read: true },
+    { text: "I'm good, thanks! Working on the new JUSTUS app.", sent: true, time: "10:42 AM", read: true },
+    { text: "That sounds exciting! Need any help?", sent: false, time: "10:43 AM", read: true }
+  ],
+  2: [
+    { text: "Thanks for the update on the project", sent: false, time: "9:10 AM", read: true },
+    { text: "No problem! Everything looks good", sent: true, time: "9:15 AM", read: true }
+  ],
+  3: [
+    { text: "Love the new app design! 🔥", sent: false, time: "Yesterday", read: true },
+    { text: "Thank you! Really appreciate it", sent: true, time: "Yesterday", read: true }
+  ],
+  4: [
+    { text: "See you at the meeting tomorrow", sent: false, time: "Yesterday", read: true },
+    { text: "Got it, I'll be there!", sent: true, time: "Yesterday", read: false }
+  ]
+};
+
 function openChat(chatId) {
+  currentChatId = chatId;
   const chat = demoChats.find(c => c.id === chatId);
   if (!chat) return;
   
@@ -790,12 +1031,10 @@ function openChat(chatId) {
   document.getElementById('activeChat').style.display = 'flex';
   document.getElementById('mainChat').classList.add('show');
   
-  // On mobile, hide sidebar
   if (window.innerWidth <= 768) {
-    document.getElementById('sidebar').classList.add('hide');
+    sidebar.classList.add('hide');
   }
   
-  // Update header
   document.getElementById('chatName').textContent = chat.name;
   document.getElementById('chatAvatar').textContent = chat.avatar;
   const onlineDot = document.getElementById('chatOnlineDot');
@@ -807,16 +1046,15 @@ function openChat(chatId) {
     document.getElementById('chatStatus').textContent = 'Offline';
   }
   
-  // Load messages
-  const messages = demoMessages[chatId] || [];
+  const messages = messagesData[chatId] || [];
   const messagesContainer = document.getElementById('messagesArea');
   messagesContainer.innerHTML = messages.map(msg => `
     <div class="message ${msg.sent ? 'sent' : 'received'}">
       <div class="message-bubble">
         ${msg.text}
         <div class="message-meta">
-          <span class="message-time">${msg.time}</span>
-          ${msg.sent ? `<span class="message-status ${msg.read ? 'status-read' : ''}">${msg.read ? '✓✓' : '✓'}</span>` : ''}
+          <span>${msg.time}</span>
+          ${msg.sent ? `<span class="message-status ${msg.read ? 'read' : ''}">${msg.read ? '✓✓' : '✓'}</span>` : ''}
         </div>
       </div>
     </div>
@@ -824,24 +1062,16 @@ function openChat(chatId) {
   
   messagesContainer.scrollTop = messagesContainer.scrollHeight;
   
-  // Remove unread badge
   chat.unread = 0;
   renderChatList();
 }
-
-// Back button for mobile
-document.getElementById('backBtn').addEventListener('click', () => {
-  document.getElementById('sidebar').classList.remove('hide');
-  document.getElementById('mainChat').classList.remove('show');
-});
 
 // Send message
 document.getElementById('sendBtn').addEventListener('click', () => {
   const input = document.getElementById('messageInput');
   const text = input.value.trim();
-  if (!text) return;
+  if (!text || !currentChatId) return;
   
-  // Add message to UI (demo)
   const messagesContainer = document.getElementById('messagesArea');
   const newMsg = document.createElement('div');
   newMsg.className = 'message sent';
@@ -849,7 +1079,7 @@ document.getElementById('sendBtn').addEventListener('click', () => {
     <div class="message-bubble">
       ${text}
       <div class="message-meta">
-        <span class="message-time">Now</span>
+        <span>Now</span>
         <span class="message-status">✓</span>
       </div>
     </div>
@@ -857,16 +1087,17 @@ document.getElementById('sendBtn').addEventListener('click', () => {
   messagesContainer.appendChild(newMsg);
   messagesContainer.scrollTop = messagesContainer.scrollHeight;
   input.value = '';
+  totalMessages++;
+  updateStatusStats();
   
-  // Simulate reply after 1 second
   setTimeout(() => {
     const reply = document.createElement('div');
     reply.className = 'message received';
     reply.innerHTML = `
       <div class="message-bubble">
-        Thanks for your message! 🔒
+        🔒 Message received securely on JUSTUS
         <div class="message-meta">
-          <span class="message-time">Now</span>
+          <span>Now</span>
         </div>
       </div>
     `;
@@ -875,7 +1106,6 @@ document.getElementById('sendBtn').addEventListener('click', () => {
   }, 1000);
 });
 
-// Enter to send
 document.getElementById('messageInput').addEventListener('keypress', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
@@ -883,48 +1113,113 @@ document.getElementById('messageInput').addEventListener('keypress', (e) => {
   }
 });
 
-// Auto-resize textarea
 document.getElementById('messageInput').addEventListener('input', function() {
   this.style.height = 'auto';
   this.style.height = Math.min(this.scrollHeight, 100) + 'px';
 });
 
-// Typing indicator simulation
-let typingTimeout;
-document.getElementById('messageInput').addEventListener('input', () => {
-  const typingBubble = document.getElementById('typingBubble');
-  const activeChat = document.querySelector('.chat-item.active');
-  if (activeChat) {
-    typingBubble.style.display = 'flex';
-    clearTimeout(typingTimeout);
-    typingTimeout = setTimeout(() => {
-      typingBubble.style.display = 'none';
-    }, 1000);
-  }
+// Back button
+document.getElementById('backBtn').addEventListener('click', () => {
+  sidebar.classList.remove('hide');
+  document.getElementById('mainChat').classList.remove('show');
 });
 
-// Initialize
-renderChatList();
+// User bar click - opens status panel
+document.getElementById('userBar').addEventListener('click', openStatusPanel);
 
-// Handle window resize
-window.addEventListener('resize', () => {
-  if (window.innerWidth > 768) {
-    document.getElementById('sidebar').classList.remove('hide');
-    document.getElementById('mainChat').classList.remove('show');
-  }
+// Settings button (top right) - opens settings modal
+const settingsModal = document.getElementById('settingsModal');
+document.getElementById('settingsBtn').addEventListener('click', () => {
+  settingsModal.classList.add('show');
+});
+document.getElementById('closeSettingsBtn').addEventListener('click', () => {
+  settingsModal.classList.remove('show');
 });
 
-// User status click
-document.getElementById('userBar').addEventListener('click', () => {
-  alert('✨ Profile customization coming soon!\n\nCurrent status: Online');
+// Status panel buttons
+document.getElementById('statusProfileBtn').addEventListener('click', () => {
+  closeStatusPanel();
+  alert('👤 Profile: ' + currentUser.name + '\nHandle: JUSTUS\nMessages are end-to-end encrypted');
 });
 
-// Logout
-document.getElementById('logoutBtn').addEventListener('click', () => {
+document.getElementById('statusSettingsBtn').addEventListener('click', () => {
+  closeStatusPanel();
+  settingsModal.classList.add('show');
+});
+
+document.getElementById('statusInviteBtn').addEventListener('click', () => {
+  closeStatusPanel();
+  alert('🔗 Invite Code: JUSTUS\n\nShare this code with friends to join your private room!');
+});
+
+document.getElementById('statusThemeBtn').addEventListener('click', () => {
+  closeStatusPanel();
+  alert('🌙 Theme toggling coming soon! Currently in Dark Mode.');
+});
+
+document.getElementById('statusLogoutBtn').addEventListener('click', () => {
+  closeStatusPanel();
   if (confirm('Are you sure you want to logout?')) {
     alert('Logged out successfully');
   }
 });
+
+// Settings modal actions
+document.getElementById('modalEditName').addEventListener('click', () => {
+  const newName = prompt('Enter your display name:', currentUser.name);
+  if (newName && newName.trim()) {
+    currentUser.name = newName.trim();
+    currentUser.initial = newName.trim()[0].toUpperCase();
+    updateStatusStats();
+  }
+  settingsModal.classList.remove('show');
+});
+
+document.getElementById('modalInviteCode').addEventListener('click', () => {
+  alert('🔐 Invite Code: JUSTUS\n\nShare this code with friends to join your private room!');
+  settingsModal.classList.remove('show');
+});
+
+document.getElementById('modalClearChats').addEventListener('click', () => {
+  if (confirm('⚠️ Clear ALL chat history? This cannot be undone.')) {
+    messagesData = {};
+    totalMessages = 0;
+    demoChats.forEach(chat => chat.unread = 0);
+    renderChatList();
+    if (document.getElementById('messagesArea')) {
+      document.getElementById('messagesArea').innerHTML = '';
+    }
+    updateStatusStats();
+    alert('All chats cleared');
+  }
+  settingsModal.classList.remove('show');
+});
+
+document.getElementById('modalLogout').addEventListener('click', () => {
+  if (confirm('Are you sure you want to logout?')) {
+    alert('Logged out successfully');
+  }
+  settingsModal.classList.remove('show');
+});
+
+// Close modal by clicking outside
+settingsModal.addEventListener('click', (e) => {
+  if (e.target === settingsModal) {
+    settingsModal.classList.remove('show');
+  }
+});
+
+// Window resize handler
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) {
+    sidebar.classList.remove('hide');
+    document.getElementById('mainChat').classList.remove('show');
+  }
+});
+
+// Initialize
+updateStatusStats();
+renderChatList();
 </script>
 </body>
 </html>
